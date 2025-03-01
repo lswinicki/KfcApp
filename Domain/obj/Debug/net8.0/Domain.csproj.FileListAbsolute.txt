@@ -6,6 +6,7 @@ C:\Users\Luka\source\repos\KFC App\Domain\obj\Debug\net8.0\Domain.GeneratedMSBui
 C:\Users\Luka\source\repos\KFC App\Domain\obj\Debug\net8.0\Domain.AssemblyInfoInputs.cache
 C:\Users\Luka\source\repos\KFC App\Domain\obj\Debug\net8.0\Domain.AssemblyInfo.cs
 C:\Users\Luka\source\repos\KFC App\Domain\obj\Debug\net8.0\Domain.csproj.CoreCompileInputs.cache
+C:\Users\Luka\source\repos\KFC App\Domain\obj\Debug\net8.0\Domain.sourcelink.json
 C:\Users\Luka\source\repos\KFC App\Domain\obj\Debug\net8.0\Domain.dll
 C:\Users\Luka\source\repos\KFC App\Domain\obj\Debug\net8.0\refint\Domain.dll
 C:\Users\Luka\source\repos\KFC App\Domain\obj\Debug\net8.0\Domain.pdb

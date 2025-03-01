@@ -12,13 +12,13 @@ public class UserRepository : BasicRepository<User>, IUserRepository
         
     }
 
-    public async Task<User?> GetByEmailAsync(string email)
+    public async Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken = default)
     {
-        return await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
+        return await _context.Users.FirstOrDefaultAsync(x => x.Email == email, cancellationToken);
     }
 
-    public async Task<User?> GetByUserNameAsync(string userName)
+    public async Task<User?> GetByUserNameAsync(string userName, CancellationToken cancellationToken = default)
     {
-        return await _context.Users.FirstOrDefaultAsync(x => x.UserName == userName);
+        return await _context.Users.FirstOrDefaultAsync(x => x.UserName == userName, cancellationToken);
     }
 }

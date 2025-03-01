@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using System.Text;
 using Application.Common.Interfaces.Repositories;
+using Application.Common.Interfaces.Services;
 using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -11,37 +12,33 @@ using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegiste
 
 namespace Application.Requests.Authorization.Command.Login;
 
-public class LoginHandler : IRequestHandler<LoginCommand, LoginDto?>
+public class LoginHandler(
+    IConfiguration configuration,
+    IUserRepository userRepository,
+    UserManager<User> userManager,
+    ICacheService cacheService) : IRequestHandler<LoginCommand, LoginDto?>
 {
-    private readonly IConfiguration _configuration;
-    private readonly IUserRepository _userRepository;
-    private readonly UserManager<User> _userManager;
-
-    public LoginHandler(IConfiguration configuration, IUserRepository userRepository, UserManager<User> userManager)
-    {
-        _configuration = configuration;
-        _userRepository = userRepository;
-        _userManager = userManager;
-    }
     public async Task<LoginDto?> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByEmailAsync(request.Email);
+        var user = await userRepository.GetByEmailAsync(request.Email);
 
-        if(user != null && await _userManager.CheckPasswordAsync(user, request.Password))
+        if (user != null && await userManager.CheckPasswordAsync(user, request.Password))
         {
-            var userRoles = await _userManager.GetRolesAsync(user);
+            var userRoles = await userManager.GetRolesAsync(user);
 
             var authClaims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user?.UserName ?? ""),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
-            
+
             foreach (var userRole in userRoles)
             {
                 authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+                authClaims.Add(new Claim(ClaimTypes.Name, user?.UserName ?? ""));
+                authClaims.Add(new Claim(ClaimTypes.Email, user?.Email ?? ""));
             }
-            
+
             var token = GetToken(authClaims);
             var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
@@ -53,19 +50,20 @@ public class LoginHandler : IRequestHandler<LoginCommand, LoginDto?>
                 Roles = userRoles.ToList(),
                 Id = user.Id.ToString()
             };
+            
             return loginDto;
         }
 
         return null;
     }
-    
+
     private JwtSecurityToken GetToken(List<Claim> claims)
     {
-        var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"] ?? ""));
+        var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"] ?? ""));
 
         var token = new JwtSecurityToken(
-            issuer: _configuration["Jwt:Issuer"],
-            audience: _configuration["Jwt:Audience"],
+            issuer: configuration["Jwt:Issuer"],
+            audience: configuration["Jwt:Audience"],
             expires: DateTime.Now.AddHours(1),
             claims: claims,
             signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)

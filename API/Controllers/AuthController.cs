@@ -30,6 +30,6 @@ public class AuthController : ControllerBase
     [Route("Register")]
     public async Task<ActionResult<bool>> Register([FromBody] RegisterCommand command)
     {
-        return true;
+        return await _mediator.Send(command);
     }
 }
