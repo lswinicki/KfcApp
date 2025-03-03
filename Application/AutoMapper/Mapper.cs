@@ -1,4 +1,5 @@
 using Application.Requests.Authorization.Command.Register;
+using Application.Requests.Category.Commands.Add;
 using Application.Requests.Category.Queries.GetAll;
 using Application.Requests.Category.Queries.GetById;
 using Application.Requests.Product.Commands.Add;
@@ -29,5 +30,8 @@ public class Mapper : Profile
         //CategoryQueries
         CreateMap<Category, GetAllCategoriesDto>();
         CreateMap<Category, GetCategoryByIdDto>();
+        
+        //CategoryCommands
+        CreateMap<AddCategoryCommand, Category>();
     }
 }

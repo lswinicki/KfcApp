@@ -1,3 +1,6 @@
+using Application.Requests.Category.Commands.Add;
+using Application.Requests.Category.Commands.Delete;
+using Application.Requests.Category.Commands.Update;
 using Application.Requests.Category.Queries.GetAll;
 using Application.Requests.Category.Queries.GetById;
 using MediatR;
@@ -30,6 +33,30 @@ public class CategoryController : ControllerBase
     {
         var category = await _mediator.Send(new GetCategoryByIdQuery{Id = id});
         return Ok(category);
+    }
+    
+    [HttpPost]
+    [Route("AddCategory")]
+    public async Task<IActionResult> AddCategory(AddCategoryCommand command)
+    {
+        await _mediator.Send(command);
+        return NoContent();
+    }
+    
+    [HttpDelete]
+    [Route("DeleteCategory")]
+    public async Task<IActionResult> DeleteCategory(DeleteCategoryCommand command)
+    {
+        await _mediator.Send(command);
+        return NoContent();
+    }
+    
+    [HttpPut]
+    [Route("UpdateCategory")]
+    public async Task<IActionResult> UpdateCategory(UpdateCategoryCommand command)
+    {
+        await _mediator.Send(command);
+        return NoContent();
     }
 
 }

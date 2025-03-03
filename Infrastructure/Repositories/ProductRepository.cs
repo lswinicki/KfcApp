@@ -25,4 +25,12 @@ public class ProductRepository : BasicRepository<Product>, IProductRepository
             .Include(x => x.Category)
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
+
+    public async Task<List<Product>?> GetByCategoryIdAsync(int categoryId, CancellationToken cancellationToken = default)
+    {
+        return await _context.Products
+            .Include(x => x.Category)
+            .Where(x => x.CategoryId == categoryId)
+            .ToListAsync(cancellationToken);
+    }
 }

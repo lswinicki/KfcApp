@@ -41,8 +41,8 @@ public class ProductController : ControllerBase
     [Route("AddProduct")]
     public async Task<IActionResult> AddProduct(AddProductCommand command)
     {
-        var product = await _mediator.Send(command);
-        return Created("", product);
+        await _mediator.Send(command);
+        return NoContent();
     }
     
     [HttpDelete]

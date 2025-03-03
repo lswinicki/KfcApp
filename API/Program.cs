@@ -14,22 +14,12 @@ using Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ProblemExceptionFilter>();
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-builder.Services.AddProblemDetails(options =>
-    options.CustomizeProblemDetails = context =>
-    {
-        context.ProblemDetails.Instance = $"{context.HttpContext.Request.Method} {context.HttpContext.Request.Path}";
-        
-        context.ProblemDetails.Extensions.TryAdd("requestId", context.HttpContext.TraceIdentifier);
-        
-        var activity = context.HttpContext.Features.Get<IHttpActivityFeature>()?.Activity;
-        context.ProblemDetails.Extensions.TryAdd("traceId", activity?.TraceId.ToString());
-    });
-builder.Services.AddExceptionHandler<ProblemExceptionHandler>();
-builder.Services.AddSingleton<IExceptionHandler, ProblemExceptionHandler>();
 builder.Services.AddSwaggerGen(opt =>
 {
     opt.SwaggerDoc("v1", new OpenApiInfo { Title = "MyAPI", Version = "v1" });
@@ -60,7 +50,6 @@ builder.Services.AddSwaggerGen(opt =>
 });
 builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly, includeInternalTypes: true);
 
-//builder.Services.AddOptions();
 builder.Services.Configure<RedisOptions>(builder.Configuration.GetSection(RedisOptions.ConfigName));
 
 builder.Services.InjectRedis(builder.Configuration);
@@ -93,8 +82,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
 
