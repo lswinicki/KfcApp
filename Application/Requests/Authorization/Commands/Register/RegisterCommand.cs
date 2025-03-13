@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace Application.Requests.Authorization.Command.Register;
+namespace Application.Requests.Authorization.Commands.Register;
 
 public class RegisterCommand : IRequest<bool>
 {

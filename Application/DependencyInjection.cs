@@ -18,6 +18,7 @@ public static class DependencyInjection
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
         services.AddScoped<ICacheService, CacheService>();
+        services.AddScoped<ICartService, CartService>();
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
         return services;

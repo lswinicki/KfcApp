@@ -18,7 +18,12 @@ public class CacheService(IDistributedCache memoryCache) : ICacheService
         ArgumentNullException.ThrowIfNull(key);
 
         var a = await memoryCache.GetAsync(key, token: cancellationToken);
-        return JsonSerializer.Deserialize<T>(a);
+        return a is null ? default : JsonSerializer.Deserialize<T>(a);
+    }
+
+    public async Task RemoveAsync(string key, CancellationToken cancellationToken = default)
+    {
+        await memoryCache.RemoveAsync(key, token: cancellationToken);
     }
 
     private async Task SetMemoryCacheValue<T>(string? key, T value, int durationHours, int durationMinutes,

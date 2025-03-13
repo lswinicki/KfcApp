@@ -4,7 +4,7 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
-namespace Application.Requests.Authorization.Command.Register;
+namespace Application.Requests.Authorization.Commands.Register;
 
 public class RegisterHandler : IRequestHandler<RegisterCommand, bool>
 {
@@ -21,8 +21,8 @@ public class RegisterHandler : IRequestHandler<RegisterCommand, bool>
 
     public async Task<bool> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
-        var userIsExist = await _userRepository.GetByEmailAsync(request.Email);
-        var userIsExist2 = await _userRepository.GetByUserNameAsync(request.Username);
+        var userIsExist = await _userRepository.GetByEmailAsync(request.Email, cancellationToken);
+        var userIsExist2 = await _userRepository.GetByUserNameAsync(request.Username, cancellationToken);
 
         if (userIsExist is not null || userIsExist2 is not null)
         {

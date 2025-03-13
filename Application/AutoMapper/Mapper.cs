@@ -1,4 +1,4 @@
-using Application.Requests.Authorization.Command.Register;
+using Application.Requests.Authorization.Commands.Register;
 using Application.Requests.Category.Commands.Add;
 using Application.Requests.Category.Queries.GetAll;
 using Application.Requests.Category.Queries.GetById;

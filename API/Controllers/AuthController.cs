@@ -1,6 +1,5 @@
-using System.Net;
 using Application.Requests.Authorization.Command.Login;
-using Application.Requests.Authorization.Command.Register;
+using Application.Requests.Authorization.Commands.Register;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

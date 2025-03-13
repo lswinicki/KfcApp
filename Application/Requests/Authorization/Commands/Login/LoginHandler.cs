@@ -37,6 +37,7 @@ public class LoginHandler(
                 authClaims.Add(new Claim(ClaimTypes.Role, userRole));
                 authClaims.Add(new Claim(ClaimTypes.Name, user?.UserName ?? ""));
                 authClaims.Add(new Claim(ClaimTypes.Email, user?.Email ?? ""));
+                authClaims.Add(new Claim(ClaimTypes.NameIdentifier, user?.Id.ToString() ?? ""));
             }
 
             var token = GetToken(authClaims);
